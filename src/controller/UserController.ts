@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import { UserBusiness } from "../business/UserBusiness";
 import { PostBusiness } from "../business/PostBusiness";
+import { ApiResponse, User } from "../Interfaces";
+import { API_RESPONSE } from "../API_RESPONSE";
 
-export class UserController {
+export class UserController<T> {
   userBusiness = new UserBusiness();
   postBusiness = new PostBusiness();
 
@@ -17,71 +19,93 @@ export class UserController {
     }
   };
 
-  verifyId = (req: Request, res: Response) => {
+  buscarUsuarioPorId = (req: Request, res: Response) => {
+    let response: ApiResponse<User>;
+
     try {
       const { id } = req.params;
 
-      console.log("Verificando se parametro ID existe....");
-      if (!id) {
-        console.log("Parametro não existe");
-        res.status(400);
-        throw new Error("ID e Obrigatorio");
-      }
-
       console.log("buscando usuario por ID!");
-      const response = this.userBusiness.verifyId(Number(id));
-
-      console.log("Verificando se retorno e nulo!");
-
-      if (!response.success) {
-        res.status(404).json(response);
-        throw new Error("Usuario Não Encontrado");
-      }
+      const response = this.userBusiness.obterUsuarioPorId(Number(id));
 
       console.log("Retornando");
-      res.status(200).json(response);
+      API_RESPONSE.SEND(res, response);
     } catch (error: any) {
-      res.send(error.sqlMessage || error.message);
+      console.log(error.sqlMessage || error.message);
+
+      response = {
+        success: false,
+        message: error.message,
+        data: [],
+        total: 0,
+        statusCode: API_RESPONSE.STATUS_CODE_SERVER_ERROR,
+      };
+
+      console.log("Enviando error....");
+      API_RESPONSE.SEND(res, response);
     }
   };
 
-  verifyAgeRange = (req: Request, res: Response) => {
+  buscarUsuariosPorFaixaEtaria = (req: Request, res: Response) => {
+    let response: ApiResponse<User>;
+
     try {
+      console.log("Pegando parametros.....");
       const min = req.query.min;
       const max = req.query.max;
 
-      const user = this.userBusiness.verifyAgeRange(Number(min), Number(max));
+      console.log("Verificando parametros com userBusiness");
+      response = this.userBusiness.obterUsuariosPorFaixaEtaria(
+        Number(min),
+        Number(max),
+      );
 
-      if (user.length <= 0) {
-        res.status(404).json(user);
-      }
-
-      res.status(200).json(user);
+      API_RESPONSE.SEND(res, response);
     } catch (error: any) {
-      res.status(404);
-      res.send(error.sqlMessage || error.message);
+      response = {
+        success: false,
+        message: error.message,
+        data: [],
+        total: 0,
+        statusCode: API_RESPONSE.STATUS_CODE_SERVER_ERROR,
+      };
+
+      API_RESPONSE.SEND(res, response);
     }
   };
 
   buscarTodosUsuarios = (req: Request, res: Response) => {
+    let response: ApiResponse<User>;
+
     try {
-      const users = this.userBusiness.buscarTodosUsuarios();
-      res.status(200).json(users);
+      console.log("Obetendo todos os usuarios...");
+      response = this.userBusiness.obterTodosUsuarios();
+
+      console.log("Enviando resposta");
+      API_RESPONSE.SEND(res, response);
     } catch (error: any) {
-      throw new Error(error);
+      response = {
+        success: false,
+        message: error.sqlMessage || error.message,
+        data: [],
+        total: 0,
+        statusCode: API_RESPONSE.STATUS_CODE_SERVER_ERROR,
+      };
+
+      API_RESPONSE.SEND(res, response);
     }
   };
 
-  verificarUsuario = (req: Request, res: Response) => {
+  atualizarUsuarioPorId = (req: Request, res: Response) => {
+    let response: ApiResponse<User>;
+
     try {
+      console.log("Pegando parametros");
       const id = req.params.id;
       const { name, email, senha, idade } = req.body;
 
-      if (!id || !name || !email || !senha || !idade) {
-        res.status(404).send("Cmapos faltando");
-      }
-
-      const user = this.userBusiness.verificarUsuario(
+      console.log("Chamando verificador....");
+      response = this.userBusiness.atualizarUsuario(
         Number.parseInt(id),
         name,
         email,
@@ -89,30 +113,46 @@ export class UserController {
         idade,
       );
 
-      console.log(user);
-      res.status(200).json(user);
+      console.log("Enviando resposta....");
+      API_RESPONSE.SEND(res, response);
     } catch (error: any) {
-      throw new Error(error.sqlMessage || error.message);
+      response = {
+        success: false,
+        message: error.sqlMessage || error.message,
+        data: [],
+        total: 0,
+        statusCode: API_RESPONSE.STATUS_CODE_SERVER_ERROR,
+      };
+
+      API_RESPONSE.SEND(res, response);
     }
   };
 
-  verificarRemocao = (req: Request, res: Response) => {
+  deletarUsuariosSemPosts = (req: Request, res: Response) => {
+    let response: ApiResponse<User>;
+
     try {
-      const condicional = req.query.confirm;
+      console.log("Pegando parametros....");
+      let condicional = req.query.confirm?.toString().toLowerCase();
 
-      console.log("Condicional: " + condicional);
-
-      if (!condicional) {
-        res.status(404).send("Campo faltando");
-      }
-
-      const users_deleted = this.userBusiness.verifidcarRemocao(
-        Boolean(condicional),
+      console.log("Enviando paramentros para verificação....");
+      response = this.userBusiness.removerUsuariosSemPosts(
+        condicional,
         this.postBusiness,
       );
-      res.status(200).send(users_deleted);
+
+      console.log("Enviando resposta...");
+      API_RESPONSE.SEND(res, response);
     } catch (error: any) {
-      throw new Error(error.sqlMessage || error.message);
+      response = {
+        success: false,
+        message: error.sqlMessage || error.message,
+        data: [],
+        total: 0,
+        statusCode: API_RESPONSE.STATUS_CODE_SERVER_ERROR,
+      };
+
+      API_RESPONSE.SEND(res, response);
     }
   };
 }

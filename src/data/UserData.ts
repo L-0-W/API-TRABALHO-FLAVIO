@@ -1,8 +1,9 @@
-import { users, Post } from "../bd";
+import { users } from "../bd";
 import { PostBusiness } from "../business/PostBusiness";
+import { ApiResponse, Post } from "../Interfaces";
 
 export class UserData {
-  buscarUsuarioPorEmail = (email: string) => {
+  consultarBancoUsuarioPorEmail = (email: string) => {
     try {
       const userFound = users.filter((user) => {
         return user.email == email;
@@ -13,7 +14,7 @@ export class UserData {
     }
   };
 
-  buscarUsuarioPorId = (id: Number) => {
+  consultarBancoUsuarioPorId = (id: Number) => {
     try {
       const userFound = users.filter((user) => {
         return user.id === id;
@@ -24,21 +25,22 @@ export class UserData {
     }
   };
 
-  buscarUsuarioPorAgeRange = (min: number, max: number) => {
+  consultarBancoUsuariosPorFaixaEtaria = (min: number, max: number) => {
     try {
-      console.log(min + "  " + max);
+      console.log("Procurando usuario...");
 
       const userFound = users.filter((user) => {
         return user.idade >= min && user.idade <= max;
       });
 
+      console.log("Enviando Resposta de userData....");
       return userFound;
     } catch (error: any) {
       throw new Error(error.sqlMessage || error.message);
     }
   };
 
-  criarUsuario = (
+  inserirNovoUsuario = (
     name: string,
     email: string,
     senha: string,
@@ -60,7 +62,7 @@ export class UserData {
         senha: senha,
         email: email,
         idade: idade,
-        admin: false,
+        role: "false",
       };
 
       users.push(novoUsuario);
@@ -70,7 +72,7 @@ export class UserData {
     }
   };
 
-  updateUsuario = (
+  salvarAtualizacaoUsuario = (
     id: number,
     name: string,
     email: string,
@@ -93,7 +95,7 @@ export class UserData {
     }
   };
 
-  buscarTodosUsuarios = () => {
+  consultarTodosUsuarios = () => {
     try {
       return users;
     } catch (error: any) {
@@ -101,26 +103,28 @@ export class UserData {
     }
   };
 
-  deleteUsersWithoutPost = (postBusiness: PostBusiness) => {
+  consultarUsuarioTemPost = (user_id: number, postBusiness: PostBusiness) => {
     try {
-      let user_posts: Post[] = [];
-      let indexes: number[] = [];
-      let users_deleted: any[] = [];
-
-      users.forEach((user, index) => {
-        user_posts = postBusiness.buscarPostPorUsuario(user.id);
-        user_posts.length <= 0 && !user.admin
-          ? users_deleted.push(user) && indexes.push(index)
-          : "";
+      postBusiness.obterTodosPosts().data.forEach((post) => {
+        if (post.authorId === user_id) {
+          console.log("TRUEEEEEEEEEeeee");
+          return true;
+        }
       });
 
-      let count = 0;
-      indexes.forEach((index) => {
-        users.splice(index - count, 1);
-        count++;
-      });
+      return false;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  };
 
-      return users_deleted;
+  removerUsuario = (user_id: number, postBusiness: PostBusiness) => {
+    try {
+      const index = users.findIndex((user) => user.id === user_id);
+      const user_return = users[index];
+
+      users.splice(index, 1);
+      return user_return;
     } catch (error: any) {
       throw new Error(error);
     }

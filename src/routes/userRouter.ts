@@ -6,8 +6,8 @@ export const userRouter = express.Router();
 const userController = new UserController();
 
 userRouter.get("/", userController.buscarTodosUsuarios);
-userRouter.get("/age-range", userController.verifyAgeRange);
-userRouter.get("/:id", userController.verifyId);
+userRouter.get("/age-range", userController.buscarUsuariosPorFaixaEtaria);
+userRouter.get("/:id", userController.buscarUsuarioPorId);
 
-userRouter.put("/:id", userController.verificarUsuario);
-userRouter.delete("/cleanup-inactive", userController.verificarRemocao);
+userRouter.put("/:id", userController.atualizarUsuarioPorId);
+userRouter.delete("/cleanup-inactive", userController.deletarUsuariosSemPosts);

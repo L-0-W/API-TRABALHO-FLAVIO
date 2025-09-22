@@ -1,83 +1,124 @@
-import { Request, Response } from "express";
+import { Request, response, Response } from "express";
 import { PostBusiness } from "../business/PostBusiness";
 import { UserBusiness } from "../business/UserBusiness";
+import { ApiResponse, Post } from "../Interfaces";
+import { API_RESPONSE } from "../API_RESPONSE";
 
 export class PostController {
   postBusiness = new PostBusiness();
   userBusiness = new UserBusiness();
 
-  verificiarPost = (req: Request, res: Response) => {
+  criarPost = (req: Request, res: Response) => {
+    let response: ApiResponse<Post>;
+
     try {
       const { title, content, authorId } = req.body;
 
-      if (!title || !content || !authorId) {
-        res.status(404).send("Campos faltantes");
-      }
-
-      const post = this.postBusiness.verificiarPost(
+      response = this.postBusiness.cadastrarNovoPost(
         title,
         content,
         Number.parseInt(authorId),
         this.userBusiness,
       );
 
-      res.status(200).json(post);
+      API_RESPONSE.SEND(res, response);
     } catch (error: any) {
-      throw new Error(error.sqlMessage || error.message);
+      response = {
+        success: true,
+        message: error.sqlMessage || error.message,
+        data: [],
+        total: 0,
+        statusCode: API_RESPONSE.STATUS_CODE_SERVER_ERROR,
+      };
+
+      API_RESPONSE.SEND(res, response);
     }
   };
 
-  buscarTodosPosts = (req: Request, res: Response) => {
+  buscarPosts = (req: Request, res: Response) => {
+    let response: ApiResponse<Post>;
+
     try {
-      const posts = this.postBusiness.buscarTodosPosts();
-      res.status(200).json(posts);
+      const response = this.postBusiness.obterTodosPosts();
+      API_RESPONSE.SEND(res, response);
     } catch (error: any) {
-      throw new Error(error);
+      response = {
+        success: false,
+        message: error.sqlMessage || error.message,
+        data: [],
+        total: 0,
+        statusCode: API_RESPONSE.STATUS_CODE_SERVER_ERROR,
+      };
+
+      API_RESPONSE.SEND(res, response);
     }
   };
 
-  patchVerificar = (req: Request, res: Response) => {
+  atualizarPostParcialmente = (req: Request, res: Response) => {
+    let response: ApiResponse<Post>;
+
     try {
+      console.log("-> Controller ~ Pegando paramentros...");
+      console.log(req.body);
       const id = Number.parseInt(req.params.id);
       const { title, content, published } = req.body;
 
-      if (!id) {
-        throw new Error("Campo ID faltando");
-      }
+      console.log("-> Controller ~ Verificando parametros...");
+      response = this.postBusiness.atualizarPost(id, title, content, published);
 
-      const post = this.postBusiness.patchVerificar(
-        id,
-        title,
-        content,
-        published,
-      );
-
-      res.status(200).send(post);
+      console.log("-> Controller ~ Enviando resposta client");
+      API_RESPONSE.SEND(res, response);
     } catch (error: any) {
-      throw new Error(error);
+      response = {
+        success: true,
+        message: error.sqlMessage || error.message,
+        data: [],
+        total: 0,
+        statusCode: API_RESPONSE.STATUS_CODE_SERVER_ERROR,
+      };
+
+      API_RESPONSE.SEND(res, response);
     }
   };
 
-  verificarDelete = (req: Request, res: Response) => {
+  deletarPostPorId = (req: Request, res: Response) => {
+    let response: ApiResponse<Post>;
+
     try {
       const id = req.params.id;
       let header = req.get("User-Id");
 
       if (!header) {
-        res.status(404).send("Usuario Não permitido");
+        response = {
+          success: false,
+          message:
+            API_RESPONSE.PARAMETRO_FALTANDO_MESSAGE + ": " + "HEADER User-Id",
+          data: [],
+          total: 0,
+          statusCode: API_RESPONSE.STATUS_CODE_DADOS_INVALIDOS,
+        };
+
+        API_RESPONSE.SEND(res, response);
+        return;
       }
 
-      header = header ? header : "0";
-
-      const postDeleted = this.postBusiness.verificarDelete(
-        Number.parseFloat(id),
+      response = this.postBusiness.removerPost(
+        Number.parseInt(id),
         Number.parseInt(header),
         this.userBusiness,
       );
 
-      res.status(200).send(postDeleted);
+      API_RESPONSE.SEND(res, response);
     } catch (error: any) {
-      throw new Error(error);
+      response = {
+        success: true,
+        message: error.sqlMessage || error.message,
+        data: [],
+        total: 0,
+        statusCode: API_RESPONSE.STATUS_CODE_SERVER_ERROR,
+      };
+
+      API_RESPONSE.SEND(res, response);
     }
   };
 }

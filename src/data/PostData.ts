@@ -1,17 +1,38 @@
-import { posts, Post } from "../bd";
+import { posts } from "../bd";
+import { Post } from "../Interfaces";
 
 export class PostData {
-  criarPost = (title: string, content: string, authorsId: number) => {
+  buscarUltimoPostId = () => {
     try {
-      let postId: number = 1;
+      return posts[posts.length - 1].id;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  };
 
+  verificarBancoEstaVazio = () => {
+    try {
       if (posts.length > 0) {
-        postId = posts[posts.length - 1].id + 1;
+        return false;
+      } else {
+        return true;
       }
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  };
 
+  inserirNovoPost = (
+    novoPostId: number,
+    title: string,
+    content: string,
+    authorsId: number,
+  ) => {
+    try {
       const date = new Date();
+
       const newPost: Post = {
-        id: postId,
+        id: novoPostId,
         title: title,
         content: content,
         authorId: authorsId,
@@ -23,14 +44,14 @@ export class PostData {
 
       return newPost;
     } catch (error: any) {
-      throw new Error(error.sqlMessage || error.message);
+      throw new Error(error);
     }
   };
 
   buscarPostPorId = (id: number) => {
     try {
-      const patchPost = posts.filter((post) => post.id === id);
-      return patchPost;
+      const post = posts.filter((post) => post.id === id);
+      return post;
     } catch (error: any) {
       throw new Error(error.sqlMessage || error.message);
     }
@@ -49,15 +70,15 @@ export class PostData {
     }
   };
 
-  buscarTodosPosts = () => {
+  consultarTodosPosts = () => {
     try {
       return posts;
     } catch (error: any) {
-      throw new Error(error.sqlMessage || error.message);
+      throw new Error(error);
     }
   };
 
-  patchPost = (
+  salvarAtualizacaoPost = (
     id: number,
     title?: string,
     content?: string,
@@ -78,9 +99,11 @@ export class PostData {
     }
   };
 
-  removerPostId = (index: number, id: number) => {
+  excluirPostDoBanco = (index: number, id: number) => {
     try {
       posts.splice(index, 1);
+
+      console.log("-> Data ~ Removendo valor");
       console.log(posts);
     } catch (error: any) {
       throw new Error(error);

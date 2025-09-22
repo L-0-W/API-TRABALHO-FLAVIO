@@ -1,20 +1,13 @@
-export interface Post {
-  id: number;
-  title: string;
-  content: string;
-  authorId: number;
-  createdAt: Date;
-  published: boolean;
-}
+import { Post, User } from "./Interfaces";
 
-export let users = [
+export let users: User[] = [
   {
     id: 10,
     name: "Flávio",
     email: "flavio@flavio.com",
     senha: "flavio",
     idade: 100,
-    admin: false,
+    role: "admin",
   },
   {
     id: 11,
@@ -22,7 +15,7 @@ export let users = [
     email: "pero@pero.com",
     senha: "pero22",
     idade: 50,
-    admin: false,
+    role: "user",
   },
   {
     id: 12,
@@ -30,7 +23,7 @@ export let users = [
     email: "flavia@flavia.com",
     senha: "flavia",
     idade: 22,
-    admin: false,
+    role: "user",
   },
   {
     id: 13,
@@ -38,7 +31,7 @@ export let users = [
     email: "flavia@flavia.com",
     senha: "flavia",
     idade: 22,
-    admin: false,
+    role: "user",
   },
   {
     id: 14,
@@ -46,7 +39,7 @@ export let users = [
     email: "flavia@flavia.com",
     senha: "flavia",
     idade: 22,
-    admin: true,
+    role: "user",
   },
   {
     id: 15,
@@ -54,7 +47,7 @@ export let users = [
     email: "flavia@flavia.com",
     senha: "flavia",
     idade: 22,
-    admin: false,
+    role: "user",
   },
 ];
 
