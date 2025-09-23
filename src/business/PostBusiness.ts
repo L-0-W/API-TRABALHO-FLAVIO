@@ -105,7 +105,7 @@ export class PostBusiness {
           message: API_RESPONSE.VAZIO_MESSAGE,
           data: [],
           total: 0,
-          statusCode: API_RESPONSE.STATUS_CODE_OK,
+          statusCode: API_RESPONSE.STATUS_CODE_NAO_ENCONTRADO,
         };
 
         return response;

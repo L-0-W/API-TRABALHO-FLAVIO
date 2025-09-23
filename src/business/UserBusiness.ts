@@ -66,7 +66,7 @@ export class UserBusiness {
           message: API_RESPONSE.VAZIO_MESSAGE,
           data: [],
           total: 0,
-          statusCode: API_RESPONSE.STATUS_CODE_OK,
+          statusCode: API_RESPONSE.STATUS_CODE_NAO_ENCONTRADO,
         };
 
         return response;
@@ -140,7 +140,7 @@ export class UserBusiness {
           message: API_RESPONSE.VAZIO_MESSAGE,
           data: [],
           total: 0,
-          statusCode: API_RESPONSE.STATUS_CODE_OK,
+          statusCode: API_RESPONSE.STATUS_CODE_NAO_ENCONTRADO,
         };
 
         return response;
@@ -261,7 +261,9 @@ export class UserBusiness {
         message: API_RESPONSE.OK_ATUALIZADO,
         data: usuario_atualizado,
         total: 0,
-        statusCode: API_RESPONSE.STATUS_CODE_OK,
+        statusCode: API_RESPONSE.STATUS_CODE_SEM_CONTEUDO,
+        // USANDO ESSE PORQUE: https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Reference/Status/204
+        //O caso de uso comum é retornar 204 como resultado de uma solicitação PUT, atualizando um recurso, sem alterar o conteúdo atual da página exibida para o usuário
       };
 
       return response;
@@ -284,7 +286,7 @@ export class UserBusiness {
           message: API_RESPONSE.VAZIO_MESSAGE,
           data: [],
           total: 0,
-          statusCode: API_RESPONSE.STATUS_CODE_OK,
+          statusCode: API_RESPONSE.STATUS_CODE_NAO_ENCONTRADO,
         };
 
         return response;
@@ -379,7 +381,7 @@ export class UserBusiness {
           message: API_RESPONSE.VAZIO_MESSAGE,
           data: [],
           total: 0,
-          statusCode: API_RESPONSE.STATUS_CODE_OK,
+          statusCode: API_RESPONSE.STATUS_CODE_NAO_ENCONTRADO,
         };
 
         return response;

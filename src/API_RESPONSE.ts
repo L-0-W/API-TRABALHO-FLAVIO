@@ -20,7 +20,7 @@ export class API_RESPONSE {
     "Usuario ou ator não tem permissão para executar operação";
 
   static STATUS_CODE_OK = 200;
-  static STATUS_CODE_VAZIO = 204;
+  static STATUS_CODE_SEM_CONTEUDO = 204;
   static STATUS_CODE_CRIADO = 201;
 
   static STATUS_CODE_SEM_PERMISAO = 401;
