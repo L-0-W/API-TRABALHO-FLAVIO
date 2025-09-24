@@ -23,7 +23,7 @@ export class UserBusiness {
     }
   };
 
-  obterUsuarioPorId = (id: number) => {
+  obterUsuarioPorId = async (id: number) => {
     try {
       let response: ApiResponse<User>;
 
@@ -56,7 +56,7 @@ export class UserBusiness {
       }
 
       console.log("Fazendo consulta de usuario....");
-      const user = this.userData.consultarBancoUsuarioPorId(id) as any;
+      const user = await this.userData.consultarBancoUsuarioPorId(id) as User[];
 
       console.log("Verificando se resposta de consulta esta vazio....");
       if (!user) {
@@ -160,7 +160,7 @@ export class UserBusiness {
     }
   };
 
-  atualizarUsuario = (
+  atualizarUsuario = async (
     id: number,
     name: string,
     email: string,
@@ -185,7 +185,7 @@ export class UserBusiness {
       }
 
       console.log("Verificando se usuario existe....");
-      const userExist = this.userData.consultarBancoUsuarioPorId(id);
+      const userExist = await this.userData.consultarBancoUsuarioPorId(id);
 
       console.log("Verificando se email existe....");
       const emailExist = this.userData.consultarBancoUsuarioPorEmail(email);
@@ -272,10 +272,10 @@ export class UserBusiness {
     }
   };
 
-  obterTodosUsuarios = () => {
+  obterTodosUsuarios = async () => {
     try {
       console.log("Consultando todos os usuarios...");
-      const users = this.userData.consultarTodosUsuarios();
+      const users = await this.userData.consultarTodosUsuarios();
       let response: ApiResponse<User>;
 
       console.log("Verificando se consulta retornou vazio...");
@@ -307,7 +307,7 @@ export class UserBusiness {
     }
   };
 
-  removerUsuariosSemPosts = (
+  removerUsuariosSemPosts = async (
     condicional?: string,
     postBusiness?: PostBusiness,
   ) => {
@@ -363,7 +363,7 @@ export class UserBusiness {
 
       console.log("Verificando os usuarios...");
 
-      const users = this.userData.consultarTodosUsuarios();
+      const users = await this.userData.consultarTodosUsuarios();
       for (let i = 0; i < users.length; i++) {
         if (!this.userData.consultarUsuarioTemPost(users[i].id, postBusiness)) {
           users_deleted.push(

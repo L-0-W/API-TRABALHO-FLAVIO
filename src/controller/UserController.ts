@@ -19,14 +19,14 @@ export class UserController<T> {
     }
   };
 
-  buscarUsuarioPorId = (req: Request, res: Response) => {
+  buscarUsuarioPorId = async (req: Request, res: Response) => {
     let response: ApiResponse<User>;
 
     try {
       const { id } = req.params;
 
       console.log("buscando usuario por ID!");
-      const response = this.userBusiness.obterUsuarioPorId(Number(id));
+      const response = await this.userBusiness.obterUsuarioPorId(Number(id));
 
       console.log("Retornando");
       API_RESPONSE.SEND(res, response);
@@ -74,12 +74,12 @@ export class UserController<T> {
     }
   };
 
-  buscarTodosUsuarios = (req: Request, res: Response) => {
+  buscarTodosUsuarios = async (req: Request, res: Response) => {
     let response: ApiResponse<User>;
 
     try {
       console.log("Obetendo todos os usuarios...");
-      response = this.userBusiness.obterTodosUsuarios();
+      response = await this.userBusiness.obterTodosUsuarios();
 
       console.log("Enviando resposta");
       API_RESPONSE.SEND(res, response);
@@ -96,7 +96,7 @@ export class UserController<T> {
     }
   };
 
-  atualizarUsuarioPorId = (req: Request, res: Response) => {
+  atualizarUsuarioPorId = async (req: Request, res: Response) => {
     let response: ApiResponse<User>;
 
     try {
@@ -105,7 +105,7 @@ export class UserController<T> {
       const { name, email, senha, idade } = req.body;
 
       console.log("Chamando verificador....");
-      response = this.userBusiness.atualizarUsuario(
+      response = await this.userBusiness.atualizarUsuario(
         Number.parseInt(id),
         name,
         email,
@@ -128,7 +128,7 @@ export class UserController<T> {
     }
   };
 
-  deletarUsuariosSemPosts = (req: Request, res: Response) => {
+  deletarUsuariosSemPosts = async (req: Request, res: Response) => {
     let response: ApiResponse<User>;
 
     try {
@@ -136,7 +136,7 @@ export class UserController<T> {
       let condicional = req.query.confirm?.toString().toLowerCase();
 
       console.log("Enviando paramentros para verificação....");
-      response = this.userBusiness.removerUsuariosSemPosts(
+      response = await this.userBusiness.removerUsuariosSemPosts(
         condicional,
         this.postBusiness,
       );

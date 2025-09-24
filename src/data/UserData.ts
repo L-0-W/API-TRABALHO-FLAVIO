@@ -1,6 +1,7 @@
 import { users } from "../bd";
 import { PostBusiness } from "../business/PostBusiness";
-import { ApiResponse, Post } from "../Interfaces";
+import { ApiResponse, Post, User } from "../Interfaces";
+import { user_db_connection } from "./DatabaseConnection";
 
 export class UserData {
   consultarBancoUsuarioPorEmail = (email: string) => {
@@ -14,11 +15,16 @@ export class UserData {
     }
   };
 
-  consultarBancoUsuarioPorId = (id: Number) => {
+  consultarBancoUsuarioPorId = async (id: Number) => {
     try {
-      const userFound = users.filter((user) => {
+      const resposta: User[] = await this.consultarTodosUsuarios();
+
+
+      const userFound: User[] = resposta.filter((user: User) => {
         return user.id === id;
       });
+
+
       return userFound;
     } catch (error: any) {
       throw new Error(error.sqlMessage || error.message);
@@ -95,9 +101,9 @@ export class UserData {
     }
   };
 
-  consultarTodosUsuarios = () => {
+  consultarTodosUsuarios = async () => {
     try {
-      return users;
+      return await user_db_connection('users').select('*');
     } catch (error: any) {
       throw new Error(error);
     }
