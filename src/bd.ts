@@ -163,4 +163,138 @@ export let users: User[] = [
   },
 ];
 
-export let posts: Post[] = [];
+export let posts: Post[] = [
+  {
+    id: 1,
+    title: "Bem-vindo ao meu blog!",
+    content:
+      "Este é o primeiro post do blog. Estou animado para compartilhar minhas ideias com vocês!",
+    authorId: 1,
+    createdAt: new Date("2024-01-10T10:00:00Z"),
+    published: true,
+  },
+  {
+    id: 2,
+    title: "Como aprender TypeScript rapidamente",
+    content:
+      "Neste post, compartilho dicas práticas para dominar TypeScript em poucas semanas.",
+    authorId: 2,
+    createdAt: new Date("2024-01-15T14:30:00Z"),
+    published: true,
+  },
+  {
+    id: 3,
+    title: "Os segredos do bom café",
+    content:
+      "Descubra como preparar o café perfeito em casa com grãos frescos e uma boa moagem.",
+    authorId: 3,
+    createdAt: new Date("2024-01-18T08:15:00Z"),
+    published: true,
+  },
+  {
+    id: 4,
+    title: "Viagem para as montanhas",
+    content:
+      "Relato da minha aventura nas montanhas de Minas Gerais. Natureza, trilhas e paz!",
+    authorId: 4,
+    createdAt: new Date("2024-01-22T16:45:00Z"),
+    published: true,
+  },
+  {
+    id: 5,
+    title: "Por que usar Git no dia a dia?",
+    content:
+      "Git não é só para times grandes. Veja como ele pode salvar seu projeto pessoal.",
+    authorId: 5,
+    createdAt: new Date("2024-01-25T11:20:00Z"),
+    published: true,
+  },
+  {
+    id: 6,
+    title: "Receita: Bolo de cenoura perfeito",
+    content:
+      "A receita que minha avó me ensinou — fofinho, úmido e com calda de chocolate.",
+    authorId: 6,
+    createdAt: new Date("2024-02-01T09:00:00Z"),
+    published: true,
+  },
+  {
+    id: 7,
+    title: "Reflexões sobre produtividade",
+    content: "Menos é mais. Como trabalhar menos horas e entregar mais valor.",
+    authorId: 7,
+    createdAt: new Date("2024-02-05T13:10:00Z"),
+    published: false, // rascunho
+  },
+  {
+    id: 8,
+    title: "Meu primeiro projeto open source",
+    content:
+      "Compartilho minha experiência contribuindo para um projeto no GitHub pela primeira vez.",
+    authorId: 8,
+    createdAt: new Date("2024-02-10T17:30:00Z"),
+    published: true,
+  },
+  {
+    id: 9,
+    title: "Dicas para dormir melhor",
+    content:
+      "Rotina noturna, ambiente ideal e hábitos que transformam seu sono.",
+    authorId: 9,
+    createdAt: new Date("2024-02-12T20:00:00Z"),
+    published: true,
+  },
+  {
+    id: 10,
+    title: "Entendendo APIs REST",
+    content:
+      "Uma introdução simples e prática ao conceito de APIs RESTful para iniciantes.",
+    authorId: 10,
+    createdAt: new Date("2024-02-15T10:45:00Z"),
+    published: true,
+  },
+  {
+    id: 11,
+    title: "Fim de semana na praia",
+    content:
+      "Sol, mar e um bom livro. Às vezes, tudo o que precisamos é desconectar.",
+    authorId: 11,
+    createdAt: new Date("2024-02-18T15:20:00Z"),
+    published: true,
+  },
+  {
+    id: 12,
+    title: "Como configurar um ambiente de desenvolvimento",
+    content:
+      "Passo a passo para deixar sua máquina pronta para programar em 2024.",
+    authorId: 12,
+    createdAt: new Date("2024-02-20T12:00:00Z"),
+    published: true,
+  },
+  {
+    id: 13,
+    title: "Livros que mudaram minha vida",
+    content:
+      "Uma lista curada de leituras transformadoras em tecnologia, filosofia e bem-estar.",
+    authorId: 13,
+    createdAt: new Date("2024-02-22T18:30:00Z"),
+    published: false, // rascunho
+  },
+  {
+    id: 14,
+    title: "Por que testes automatizados importam",
+    content:
+      "Evite bugs e ganhe confiança no seu código com testes bem escritos.",
+    authorId: 14,
+    createdAt: new Date("2024-02-25T09:15:00Z"),
+    published: true,
+  },
+  {
+    id: 15,
+    title: "Minha rotina matinal",
+    content: "Como começo meu dia para ter foco, energia e clareza mental.",
+    authorId: 15,
+    createdAt: new Date("2024-03-01T07:00:00Z"),
+    published: true,
+  },
+];
